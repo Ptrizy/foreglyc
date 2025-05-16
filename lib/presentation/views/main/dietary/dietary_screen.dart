@@ -382,9 +382,7 @@ class _DietaryScreenState extends State<DietaryScreen> {
                     children: [
                       CircleAvatar(
                         radius: 20.r,
-                        backgroundImage: AssetImage(
-                          'assets/images/nutritionist.png',
-                        ),
+                        backgroundImage: AssetImage('assets/desfira.png'),
                       ),
                       SizedBox(width: 12.w),
                       Text(

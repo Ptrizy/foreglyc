@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:foreglyc/data/datasources/local/home_preference.dart';
+import 'package:foreglyc/data/datasources/logger.dart';
 import 'package:foreglyc/data/datasources/network/api_client.dart';
 import 'package:foreglyc/data/datasources/network/api_config.dart';
 import 'package:foreglyc/data/models/home_model.dart';
@@ -28,6 +29,7 @@ class HomeRepositoryImpl implements HomeRepository {
         await _homePreferences.saveHome(homeResponse);
         return homeResponse;
       }
+      AppLogger.debug(response.data.toString());
 
       throw Exception('Response data is null');
     } on DioException catch (e) {

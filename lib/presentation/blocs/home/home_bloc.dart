@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:foreglyc/data/datasources/logger.dart';
 import 'package:foreglyc/data/models/home_model.dart';
 import 'package:foreglyc/data/repositories/home_repository.dart';
 
@@ -22,6 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
     try {
       final response = await _repository.getHomeData();
+      AppLogger.debug(response.data.toString());
       emit(HomeLoaded(response));
     } catch (e) {
       emit(HomeError(e.toString()));

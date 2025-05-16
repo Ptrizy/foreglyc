@@ -24,5 +24,10 @@ class ApiConfig {
       '$baseUrl/api/v1/monitorings/cgm/preferences';
 
   String get getHomepage => "$baseUrl/api/v1/homepages/self";
+
+  String get generateFoodInformations =>
+      "$baseUrl/api/v1/foods/generates/informations";
+
+  String get createFoodMonitorings => "$baseUrl/api/v1/foods/monitorings";
   // sisanya construct URL langsung di repository impl
 }

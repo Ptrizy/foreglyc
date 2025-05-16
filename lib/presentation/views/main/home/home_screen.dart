@@ -7,6 +7,7 @@ import 'package:foreglyc/core/styles/text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:foreglyc/data/models/home_model.dart';
 import 'package:foreglyc/presentation/blocs/home/home_bloc.dart';
+import 'package:foreglyc/presentation/views/main/dietary/food_recall_screen.dart';
 import 'package:foreglyc/presentation/views/main/services/fore_ai/fore_ai_screen.dart';
 import 'package:foreglyc/presentation/views/main/services/fore_log/glucose_tracking_popup.dart';
 import 'package:foreglyc/presentation/views/main/services/journey/journey_screen.dart';
@@ -564,47 +565,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   dailyFoods.isEmpty
                       ? [Center(child: Text('No meal data available'))]
                       : dailyFoods.map((meal) {
-                        // Extract time in hours for comparison
-                        final timeStr =
-                            meal.time.split(' ')[0]; // Get "6" from "6 AM"
-                        final isPM = meal.time.contains('PM');
-                        int timeHour = int.tryParse(timeStr) ?? 0;
-                        if (isPM && timeHour != 12) timeHour += 12;
-
                         final hasFoodData =
-                            meal.foodMonitoring != null ||
-                            meal.foodRecomendation != null;
-                        final foodName =
-                            meal.foodMonitoring?.foodName ??
-                            meal.foodRecomendation?.foodName ??
-                            'No meal data';
-                        final imageUrl =
-                            meal.foodMonitoring?.imageUrl ??
-                            meal.foodRecomendation?.imageUrl ??
-                            '';
-
-                        // Show "Add" button if it's the next meal without data
-                        bool showAddButton = false;
-                        if (!hasFoodData) {
-                          final mealTimeHour = _getMealTimeHour(meal.mealTime);
-                          showAddButton =
-                              mealTimeHour > currentHour &&
-                              mealTimeHour ==
-                                  _getNextMealTimeHour(dailyFoods, currentHour);
-                        }
+                            meal.foodMonitoring?.foodName?.isNotEmpty == true ||
+                            meal.foodRecomendation?.foodName?.isNotEmpty ==
+                                true;
 
                         return _buildMealItem(
                           mealType: meal.mealTime,
-                          foodName: foodName,
+                          foodName:
+                              hasFoodData
+                                  ? meal.foodMonitoring?.foodName ??
+                                      meal.foodRecomendation?.foodName ??
+                                      'No meal data'
+                                  : 'No meal data',
                           time: meal.time,
-                          timeHour: timeHour,
-                          currentHour: currentHour,
+                          timeHour: _parseTimeToHour(meal.time),
+                          currentHour: TimeOfDay.now().hour,
                           imagePath:
-                              imageUrl.isNotEmpty
-                                  ? imageUrl
+                              hasFoodData
+                                  ? meal.foodMonitoring?.imageUrl ??
+                                      meal.foodRecomendation?.imageUrl ??
+                                      _getDefaultMealImage(meal.mealTime)
                                   : _getDefaultMealImage(meal.mealTime),
-                          showAddButton: showAddButton,
-                          isNetworkImage: imageUrl.isNotEmpty,
+                          showAddButton:
+                              !hasFoodData, // Selalu aktif jika tidak ada data
+                          isNetworkImage:
+                              hasFoodData &&
+                              (meal.foodMonitoring?.imageUrl?.isNotEmpty ==
+                                      true ||
+                                  meal
+                                          .foodRecomendation
+                                          ?.imageUrl
+                                          ?.isNotEmpty ==
+                                      true),
                         );
                       }).toList(),
             ),
@@ -613,6 +606,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  int _parseTimeToHour(String time) {
+    final parts = time.split(' ');
+    final hour = int.tryParse(parts[0]) ?? 0;
+    final isPM = parts.length > 1 && parts[1].toUpperCase() == 'PM';
+    return isPM && hour != 12 ? hour + 12 : hour;
   }
 
   // Helper method to determine the next meal time that needs input
@@ -740,17 +740,36 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(width: 8.w),
-          showAddButton
-              ? SvgPicture.asset(
-                'assets/icons/camera_active.svg',
-                width: 24.w,
-                height: 24.h,
-              )
-              : SvgPicture.asset(
-                'assets/icons/camera_inactive.svg',
-                width: 24.w,
-                height: 24.h,
-              ),
+          InkWell(
+            onTap:
+                showAddButton
+                    ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => FoodRecallScreen(
+                                mealType: mealType,
+                                currentFood: foodName,
+                                onFoodUpdated: (newFood) {},
+                              ),
+                        ),
+                      );
+                    }
+                    : null,
+            child:
+                showAddButton
+                    ? SvgPicture.asset(
+                      'assets/icons/camera_active.svg',
+                      width: 24.w,
+                      height: 24.h,
+                    )
+                    : SvgPicture.asset(
+                      'assets/icons/camera_inactive.svg',
+                      width: 24.w,
+                      height: 24.h,
+                    ),
+          ),
         ],
       ),
     );
