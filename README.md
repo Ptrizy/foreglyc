@@ -74,9 +74,7 @@ To *transform diabetes care from reactive to proactive, using technology to **pr
 
 ## ⚙️ Tech Stack Overview
 
-<p align="center">
-  <img src="https://firebasestorage.googleapis.com/v0/b/corded-evening-396809.appspot.com/o/foreglyc-storage%2Fsistem%20design%20foreglyc.png?alt=media" alt="System Design Foreglyc" width="80%" />
-</p>
+![sistem design foreglyc](https://github.com/user-attachments/assets/669f04e0-0ec0-47d0-a172-142ae0ebf8f3)
 
 ForeGlyc is built with a robust and scalable technology stack designed to ensure a *seamless user experience, **high performance, and **easy integration* with smart health services.
 
