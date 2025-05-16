@@ -16,6 +16,7 @@ import 'package:foreglyc/presentation/views/main/monitoring/glucometer/method_sc
 import 'package:foreglyc/presentation/views/main/monitoring/cgm/method_screen.dart'
     as cgm;
 import 'package:foreglyc/presentation/widgets/button.dart';
+import 'package:foreglyc/presentation/widgets/popout.dart';
 import 'package:go_router/go_router.dart';
 
 class MonitoringDeviceScreen extends StatelessWidget {
@@ -91,10 +92,23 @@ class MonitoringDeviceScreen extends StatelessWidget {
                           builder: (ctx) => cgmMonitor.MonitoringScreen(),
                         ),
                       ),
-                  notConnectedPage:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) => cgm.MethodScreen()),
-                      ),
+                  notConnectedPage: () {
+                    showPopupBottomSheet(
+                      context,
+                      title: 'Attention',
+                      content:
+                          'If you choose this method, you must routinely input test result data at crucial times, and the displayed graph will not be real-time.',
+                      onClicked: () {
+                        Navigator.pop(context);
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => cgm.MethodScreen(),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
                 SizedBox(height: 24.h),
                 _buildDeviceSection(
@@ -111,12 +125,23 @@ class MonitoringDeviceScreen extends StatelessWidget {
                           builder: (ctx) => glucoMonitor.MonitoringScreen(),
                         ),
                       ),
-                  notConnectedPage:
-                      () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (ctx) => gluco.MethodScreen(),
-                        ),
-                      ),
+                  notConnectedPage: () {
+                    showPopupBottomSheet(
+                      context,
+                      title: 'Attention',
+                      content:
+                          'If you choose this method, you must routinely input test result data at crucial times, and the displayed graph will not be real-time.',
+                      onClicked: () {
+                        Navigator.pop(context);
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => gluco.MethodScreen(),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
