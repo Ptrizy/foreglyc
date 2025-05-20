@@ -68,3 +68,21 @@ class ChatError extends ChatState {
   @override
   List<Object?> get props => [message];
 }
+
+class GlucosePredictionLoaded extends ChatState {
+  final GlucosePredictionResponse response;
+
+  const GlucosePredictionLoaded({required this.response});
+
+  @override
+  List<Object?> get props => [response];
+}
+
+class ChatWithPredictionLoaded extends ChatState {
+  final GlucosePredictionResponse response;
+
+  const ChatWithPredictionLoaded({required this.response});
+
+  @override
+  List<Object?> get props => [response];
+}

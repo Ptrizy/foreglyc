@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foreglyc/core/styles/color.dart';
@@ -194,9 +195,24 @@ class _ForeAIScreenState extends State<ForeAIScreen> {
                                               : Color(0xFFD1E3FF),
                                       borderRadius: BorderRadius.circular(16.r),
                                     ),
-                                    child: Text(
-                                      message.message,
-                                      style: TextStyles.body2(),
+                                    child: MarkdownBody(
+                                      data: message.message,
+                                      styleSheet: MarkdownStyleSheet(
+                                        p: TextStyles.body2(),
+                                        strong: TextStyles.body2(
+                                          weight: FontWeightOption.bold,
+                                        ),
+                                        listBullet: TextStyles.body2(),
+                                        h1: TextStyles.heading1(),
+                                        h2: TextStyles.heading2(),
+                                        h3: TextStyles.heading3(),
+                                        h4: TextStyles.heading4(),
+                                        h5: TextStyles.body1(),
+                                        h6: TextStyles.body2(),
+                                        blockquote: TextStyles.body2(
+                                          color: ColorStyles.neutral600,
+                                        ),
+                                      ),
                                     ),
                                   ),
 

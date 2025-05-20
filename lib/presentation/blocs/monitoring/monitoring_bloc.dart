@@ -18,12 +18,12 @@ class MonitoringBloc extends Bloc<MonitoringEvent, MonitoringState> {
     CreateGlucometerMonitoringEvent event,
     Emitter<MonitoringState> emit,
   ) async {
-    emit(MonitoringLoading(isGraphLoading: true, isListLoading: true));
+    emit(MonitoringGlucoseLoading());
     try {
       await _monitoringRepository.createMonitoringGlucoseGlucometer(
         event.bloodGlucose,
       );
-      emit(MonitoringInitial());
+      emit(MonitoringGlucoseCreated());
     } catch (e) {
       emit(
         MonitoringError(

@@ -32,3 +32,14 @@ class SaveChatEvent extends ChatEvent {
   @override
   List<Object> get props => [chatMessages];
 }
+
+class GetGlucosePredictionEvent extends ChatEvent {}
+
+class ChatWithGlucosePredictionEvent extends ChatEvent {
+  final ChatWithPredictionRequest request;
+
+  const ChatWithGlucosePredictionEvent({required this.request});
+
+  @override
+  List<Object?> get props => [request];
+}

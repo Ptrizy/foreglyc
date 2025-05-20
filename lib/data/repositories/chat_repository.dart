@@ -13,4 +13,9 @@ abstract class ChatRepository {
   Future<List<ChatModel>?> loadChat();
 
   Future<bool> deleteChat();
+
+  Future<GlucosePredictionResponse> getGlucosePrediction();
+  Future<GlucosePredictionResponse> chatWithGlucosePrediction(
+    ChatWithPredictionRequest request,
+  );
 }

@@ -31,6 +31,10 @@ class MonitoringLoading extends MonitoringState {
   List<Object> get props => [isGraphLoading, isListLoading];
 }
 
+class MonitoringGlucoseLoading extends MonitoringState {}
+
+class MonitoringGlucoseCreated extends MonitoringState {}
+
 class MonitoringGraphLoaded extends MonitoringState {
   final GetMonitoringGlucoseGraphResponse response;
   const MonitoringGraphLoaded(this.response);

@@ -8,9 +8,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:foreglyc/data/models/home_model.dart';
 import 'package:foreglyc/presentation/blocs/home/home_bloc.dart';
 import 'package:foreglyc/presentation/views/main/dietary/food_recall_screen.dart';
-import 'package:foreglyc/presentation/views/main/services/fore_ai/fore_ai_screen.dart';
-import 'package:foreglyc/presentation/views/main/services/fore_log/glucose_tracking_popup.dart';
-import 'package:foreglyc/presentation/views/main/services/journey/journey_screen.dart';
+import 'package:foreglyc/presentation/views/main/home/glucose_prediction_ai/blood_sugar_prediction_screen.dart';
+import 'package:foreglyc/presentation/views/main/home/services/fore_ai/fore_ai_screen.dart';
+import 'package:foreglyc/presentation/views/main/home/services/fore_log/glucose_tracking_popup.dart';
+import 'package:foreglyc/presentation/views/main/home/services/journey/journey_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -151,11 +152,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.fullName,
+                    data.fullName.length > 10
+                        ? '${data.fullName.substring(0, 10)}...'
+                        : data.fullName,
                     style: TextStyles.heading2(
                       color: Colors.white,
                       weight: FontWeightOption.semiBold,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   SizedBox(height: 4.h),
                   Container(
@@ -265,7 +270,16 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(height: 200.h, child: _buildBloodSugarChart(glucoseData)),
           SizedBox(height: 16.h),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          BloodSugarPredictionScreen(glucoseData: glucoseData),
+                ),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: ColorStyles.primary500,
               foregroundColor: Colors.white,
@@ -704,11 +718,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     )
-                    : Image.asset(
-                      imagePath,
+                    : SvgPicture.asset(
+                      'assets/icons/default_null_menu.svg',
                       width: 60.w,
-                      height: 60.w,
-                      fit: BoxFit.cover,
+                      height: 60.h,
                     ),
           ),
           SizedBox(width: 12.w),

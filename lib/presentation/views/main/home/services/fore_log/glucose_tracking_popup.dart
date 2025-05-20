@@ -50,7 +50,7 @@ class _GlucoseTrackingPopupState extends State<GlucoseTrackingPopup> {
 
     return BlocListener<MonitoringBloc, MonitoringState>(
       listener: (context, state) {
-        if (state is MonitoringLoading) {
+        if (state is MonitoringGlucoseLoading) {
           Loading();
         }
         if (state is MonitoringError) {
@@ -60,11 +60,12 @@ class _GlucoseTrackingPopupState extends State<GlucoseTrackingPopup> {
           ).showSnackBar(SnackBar(content: Text(state.message)));
         }
 
-        if (state is MonitoringCreated) {
+        if (state is MonitoringGlucoseCreated) {
+          setState(() => _isSubmitting = false);
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.response.message),
+              content: Text('Berhasil tercatat!'),
               backgroundColor: Colors.green,
             ),
           );

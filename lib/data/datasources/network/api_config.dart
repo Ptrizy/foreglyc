@@ -8,6 +8,10 @@ class ApiConfig {
 
   String get chatbotForeglycExport =>
       "$baseUrl/api/v1/chatbots/foreglyc-expert";
+  String get getGlucosePrediction =>
+      "$baseUrl/api/v1/chatbots/glucoses/prediction";
+  String get chatWithGlucosePredictions =>
+      "$baseUrl/api/v1/chatbots/glucoses/chat/prediction";
 
   String get uploadFile => "$baseUrl/api/v1/files/upload";
 
@@ -29,5 +33,7 @@ class ApiConfig {
       "$baseUrl/api/v1/foods/generates/informations";
 
   String get createFoodMonitorings => "$baseUrl/api/v1/foods/monitorings";
+
+  String get getFoodHomePage => "$baseUrl/api/v1/foods/homepages/self";
   // sisanya construct URL langsung di repository impl
 }

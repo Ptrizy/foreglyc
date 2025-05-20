@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foreglyc/data/datasources/logger.dart';
 import 'package:foreglyc/data/models/chat_model.dart';
 import 'package:foreglyc/data/repositories/chat_repository.dart';
 
@@ -16,6 +18,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(_onSendMessage);
     on<SaveChatEvent>(_onSaveChat);
     on<DeleteChatEvent>(_onDeleteChat);
+    on<GetGlucosePredictionEvent>(_onGetGlucosePrediction);
+    on<ChatWithGlucosePredictionEvent>(_onChatWithGlucosePrediction);
   }
 
   Future<void> _onLoadChat(LoadChatEvent event, Emitter<ChatState> emit) async {
@@ -112,6 +116,40 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(ChatDeleted());
     } catch (e) {
       emit(ChatError(message: 'Failed to delete chat: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onGetGlucosePrediction(
+    GetGlucosePredictionEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      emit(ChatLoading());
+      final response = await _chatRepository.getGlucosePrediction();
+      AppLogger.debug(response.toString());
+      emit(GlucosePredictionLoaded(response: response));
+    } catch (e) {
+      emit(ChatError(message: 'Failed to get prediction: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onChatWithGlucosePrediction(
+    ChatWithGlucosePredictionEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      emit(ChatLoading());
+      final response = await _chatRepository.chatWithGlucosePrediction(
+        event.request,
+      );
+      AppLogger.debug(response.toString());
+      emit(ChatWithPredictionLoaded(response: response));
+    } catch (e) {
+      final errorMessage =
+          e is DioException
+              ? e.response?.data?.toString() ?? e.message
+              : e.toString();
+      emit(ChatError(message: 'Failed to chat with prediction: $errorMessage'));
     }
   }
 }

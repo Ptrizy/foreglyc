@@ -9,17 +9,20 @@ import 'package:foreglyc/data/datasources/network/api_client.dart';
 import 'package:foreglyc/data/datasources/network/api_config.dart';
 import 'package:foreglyc/data/repositories/chat_repository.dart';
 import 'package:foreglyc/data/repositories/dietary_repository.dart';
+import 'package:foreglyc/data/repositories/food_repository.dart';
 import 'package:foreglyc/data/repositories/home_repository.dart';
 import 'package:foreglyc/data/repositories/monitoring_preferences_repository.dart';
 import 'package:foreglyc/data/repositories/monitoring_repository.dart';
 import 'package:foreglyc/data/repositories_impl/auth_repository_impl.dart';
 import 'package:foreglyc/data/repositories_impl/chat_repository_impl.dart';
 import 'package:foreglyc/data/repositories_impl/dietary_repository_impl.dart';
+import 'package:foreglyc/data/repositories_impl/food_repository_impl.dart';
 import 'package:foreglyc/data/repositories_impl/home_repository_impl.dart';
 import 'package:foreglyc/data/repositories_impl/monitoring_preferences_repository_impl.dart';
 import 'package:foreglyc/data/repositories_impl/monitoring_repository_impl.dart';
 import 'package:foreglyc/presentation/blocs/auth/auth_bloc.dart';
 import 'package:foreglyc/presentation/blocs/chat/chat_bloc.dart';
+import 'package:foreglyc/presentation/blocs/dietary/dietary_bloc.dart';
 import 'package:foreglyc/presentation/blocs/food_information/food_information_bloc.dart';
 import 'package:foreglyc/presentation/blocs/food_recall/food_recall_bloc.dart';
 import 'package:foreglyc/presentation/blocs/home/home_bloc.dart';
@@ -63,6 +66,10 @@ Future<void> main() async {
     apiClient: apiClient,
     apiConfig: apiConfig,
   );
+  final foodRepository = FoodRepositoryImpl(
+    apiClient: apiClient,
+    apiConfig: apiConfig,
+  );
 
   runApp(
     MyApp(
@@ -72,6 +79,7 @@ Future<void> main() async {
       monitoringPreferenceRepository: monitoringPreferenceRepository,
       homeRepository: homeRepository,
       dietaryRepository: dietaryRepository,
+      foodRepository: foodRepository,
     ),
   );
 }
@@ -83,6 +91,7 @@ class MyApp extends StatelessWidget {
   final MonitoringPreferenceRepository monitoringPreferenceRepository;
   final HomeRepository homeRepository;
   final DietaryRepository dietaryRepository;
+  final FoodRepository foodRepository;
 
   const MyApp({
     super.key,
@@ -92,6 +101,7 @@ class MyApp extends StatelessWidget {
     required this.monitoringPreferenceRepository,
     required this.homeRepository,
     required this.dietaryRepository,
+    required this.foodRepository,
   });
 
   @override
@@ -125,6 +135,9 @@ class MyApp extends StatelessWidget {
           create:
               (context) =>
                   FoodInformationBloc(dietaryRepository: dietaryRepository),
+        ),
+        BlocProvider(
+          create: (context) => DietaryBloc(foodRepository: foodRepository),
         ),
       ],
       child: ScreenUtilInit(

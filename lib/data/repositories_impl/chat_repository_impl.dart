@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:foreglyc/data/datasources/local/chat_preferences.dart';
+import 'package:foreglyc/data/datasources/logger.dart';
 import 'package:foreglyc/data/datasources/network/api_client.dart';
 import 'package:foreglyc/data/datasources/network/api_config.dart';
 import 'package:foreglyc/data/models/chat_model.dart';
@@ -99,6 +100,40 @@ class ChatRepositoryImpl implements ChatRepository {
       return await _chatPreferences.deleteChat();
     } catch (e) {
       throw Exception('Failed to delete chat: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<GlucosePredictionResponse> getGlucosePrediction() async {
+    try {
+      final response = await _apiClient.dio.get(
+        _apiConfig.getGlucosePrediction,
+      );
+      AppLogger.debug(response.data.toString());
+      return GlucosePredictionResponse.fromJson(response.data['data']);
+    } catch (e) {
+      throw Exception('Failed to get glucose prediction: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<GlucosePredictionResponse> chatWithGlucosePrediction(
+    ChatWithPredictionRequest request,
+  ) async {
+    try {
+      final response = await _apiClient.dio.post(
+        _apiConfig.chatWithGlucosePredictions,
+        data: request.toJson(),
+      );
+      AppLogger.debug(response.data.toString());
+      return GlucosePredictionResponse.fromJson(response.data['data']);
+    } catch (e, stackTrace) {
+      // Debugging tambahan
+      print('Error details: $e');
+      print('Stack trace: $stackTrace');
+      throw Exception(
+        'Failed to chat with glucose prediction: ${e.toString()}',
+      );
     }
   }
 }
