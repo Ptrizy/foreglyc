@@ -56,7 +56,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       _pageController.jumpToPage(_pages.length - 1);
                     },
                     child: Text(
-                      'Lewati',
+                      'Skip',
                       style: TextStyles.button1(
                         weight: FontWeightOption.semiBold,
                         color: Colors.white,
